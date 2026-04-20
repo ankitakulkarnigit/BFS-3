@@ -2,7 +2,95 @@
 
 ## Problem1 Remove Invalid Parentheses(https://leetcode.com/problems/remove-invalid-parentheses/)
 
+Time: O(2^n)
+Space: O(2^(n^2))
+
+class Solution:
+    def removeInvalidParentheses(self, s: str) -> List[str]:        
+        self.out = []
+        self.visited = set()
+        self.max = 0
+        self.dfs(s)
+        return self.out
+
+    def dfs(self,s):
+        # base
+        if len(s) < self.max:
+            return
+
+        if self.isValid(s):
+            if len(s) > self.max:
+                print(s, self.out)
+                self.max = len(s)
+                self.out.clear()
+            self.out.append(s)
+            return
+
+        # logic
+        for i in range(len(s)):
+            baby = s[:i] + s[i+1:]
+            if baby not in self.visited:
+                self.visited.add(baby)
+                self.dfs(baby)
+        
+    # check if valid parenthesis
+    def isValid(self,s):
+        count = 0
+        for i in s:
+            if i == '(':
+                count += 1
+            elif i == ')':
+                if count == 0: 
+                    return False
+                count -= 1
+            elif i != '(' or i != ')':
+                continue
+        return count == 0
+
+Alternate solution using BFS:
+
+Time: O(2^n) - cz its choose or not to choose so base 2
+Space: O(2^(n^2))
+
+class Solution:
+    def removeInvalidParentheses(self, s: str) -> List[str]:        
+        res = []
+        visited = set([s])
+        queue = deque([s])
+        found = False
+
+        while queue and not found:
+            for _ in range(len(queue)):
+                curr = queue.popleft()
+                if self.isValid(curr):
+                    res.append(curr)
+                    found = True
+                else:
+                    for i in range(len(curr)):
+                        baby = curr[:i] + curr[i+1:]
+                        if baby not in visited:
+                            visited.add(baby)
+                            queue.append(baby)
+        return res
+        
+        
+    # check if valid parenthesis
+    def isValid(self,s):
+        count = 0
+        for i in s:
+            if i.isalpha():
+                continue
+            if i == '(':
+                count += 1
+            elif i == ')':
+                count -= 1
+            if count < 0: 
+                return False
+        return count == 0
+
 
 ## Problem2 Clone graph (https://leetcode.com/problems/clone-graph/)
+
+
 
 
