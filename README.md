@@ -93,6 +93,9 @@ class Solution:
 
 Using DFS -
 
+Time = O(V+E)
+Space = O(V)
+
 """
 # Definition for a Node.
 class Node:
@@ -128,3 +131,42 @@ class Solution:
         return self.hashmap[node]
 
 
+Using BFS -
+
+Time = O(V+E)
+Space = O(V)
+
+"""
+# Definition for a Node.
+class Node:
+    def __init__(self, val = 0, neighbors = None):
+        self.val = val
+        self.neighbors = neighbors if neighbors is not None else []
+"""
+
+from typing import Optional
+class Solution:
+    def cloneGraph(self, node: Optional['Node']) -> Optional['Node']:
+        if node is None:
+            return node
+
+        self.hashmap = {}
+        q = [node]
+        while q:
+            curr = q.pop(0)
+            newNode = self.clone(curr)
+
+            for ne in curr.neighbors:
+                if ne not in self.hashmap:
+                    q.append(ne)
+                newNode.neighbors.append(self.clone(ne))
+
+        return self.hashmap[node]
+    
+    def clone(self,node):
+        if node is None:
+            return None
+        if node in self.hashmap:
+            return self.hashmap[node]
+        self.hashmap[node] = Node(node.val)
+        return self.hashmap[node]
