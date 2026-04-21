@@ -91,6 +91,40 @@ class Solution:
 
 ## Problem2 Clone graph (https://leetcode.com/problems/clone-graph/)
 
+Using DFS -
 
+"""
+# Definition for a Node.
+class Node:
+    def __init__(self, val = 0, neighbors = None):
+        self.val = val
+        self.neighbors = neighbors if neighbors is not None else []
+"""
+
+from typing import Optional
+class Solution:
+    def cloneGraph(self, node: Optional['Node']) -> Optional['Node']:
+        if node is None:
+            return node
+            
+        self.hashmap = {}
+        self.dfs(node)
+        return self.hashmap[node]
+        
+    def dfs(self, node):
+        currNode = self.clone(node)
+
+        for ne in node.neighbors:
+            if ne not in self.hashmap:
+                self.dfs(ne)
+            currNode.neighbors.append(self.clone(ne))
+    
+    def clone(self,node):
+        if node is None:
+            return None
+        if node in self.hashmap:
+            return self.hashmap[node]
+        self.hashmap[node] = Node(node.val)
+        return self.hashmap[node]
 
 
